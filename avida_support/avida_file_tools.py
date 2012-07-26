@@ -1,3 +1,9 @@
+ ####################################
+ # Avida Analysis Toolkit - v 0.1   #
+ # A. W. Covert III, Ph. D          #
+ # All rights reserved              #
+ ####################################
+
 #need os.walk and re.search
 import os, re
 
@@ -111,8 +117,13 @@ def get_row(file, row):
     #list of stuff to return
     stuff = []
 
-    #open a gzipped file
-    fp = gzip.open(file)
+    fp = None
+
+    if file[-2:] == "gz":
+        #open a gzipped file
+        fp = gzip.open(file)
+    else:
+        fp = open(file)
 
     #dump the entire file into 'data'
     data = fp.readlines()

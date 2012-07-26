@@ -1,3 +1,9 @@
+ ####################################
+ # Avida Analysis Toolkit - v 0.1   #
+ # A. W. Covert III, Ph. D          #
+ # All rights reserved              #
+ ####################################
+
 from avida_file_tools import *
 from pylab import *
 
