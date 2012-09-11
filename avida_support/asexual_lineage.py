@@ -24,6 +24,7 @@ from exceptions import KeyError
 
 
 
+
 class cASexualLineage():
 
 
@@ -64,6 +65,13 @@ class cASexualLineage():
 
         return linStr
 
+    def __len__(self):
+        return self._size
+
+
+    def get_final_dom(self):
+        return self._Dom
+
     ### Function - cASexualLineage::_load_detail_lineage_file
     ### Purpose  - Load an asexual lineage entry into the self._lin
     ### Input    - filename of a detail dump (.dat or .gz)
@@ -96,9 +104,8 @@ class cASexualLineage():
                 #if we're at the beginning of the file, we've found the Ancestor! (we hope!)
                 if count == 0:
                     self._Ancestor = ID
-
                 count += 1
-
+                
         if ID != None: #did the damn thing actually work?
             self._Dom = ID#then, in theory, the last genome is the final dominant!
 
@@ -118,6 +125,17 @@ class cASexualLineage():
             return True
         else:
             return False
+
+
+    def update_with_child(self):
+        child_ID = self._Dom
+        self.lin_[child_ID]["child"] = None
+        parent_ID = self._lin[child_ID].get("parent")
+        while parent_ID != '0':
+            #print type(self._lin[parent_ID])
+            self._lin[parent_ID]["child"] = child_ID
+            child_ID = parent_ID
+            parent_ID = self._lin[child_ID].get("parent")
 
     ### Function - cASexualLineage::_get_key
     ### Purpose  - Retrieve the entry of a speific key
