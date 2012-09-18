@@ -29,3 +29,6 @@ class EpistasisTracker:
         for i in range(len(child_genotype)):
             if child_genotype[i] != parent_genotype[i]:
                 return (child_genotype[i], i)
+
+    def revert_sequence(self):
+        pass

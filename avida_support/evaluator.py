@@ -10,20 +10,12 @@ class MutationEvaluator:
         self.lineage = asexual_lineage.cASexualLineage(path_to_lineage)
         self.lineage.update_with_child()
 
-    def identify_deleterious_step(self):
-        parent = self.lineage[1]
-        child = self.lineage[1].get("child")
-        while child is not None:
-            if -1 == self.evaluate_effect_of_mutation(self.lin[child].get("raw")[2],                                             self.lin[parent].get("raw")[2]):
-            else:
-                continue
-
     def evaluate_effect_of_mutation(self, child_genotype, parent_genotype):
         genotypeFitness = self.get_fitness_of_sequence(child_genotype)
         parentFitness = self.get_fitness_of_sequence(parent_genotype)
 
         if genotypeFitness - parentFitness > 0.01 * parentFitness:
-            #if greater than 0 will be beneficial mutation
+            #if greater than 0 will be beneficial mutation 
             #geno = 11 parent = 10
             #1 > 0.1 
             return 1
@@ -61,6 +53,4 @@ class MutationEvaluator:
         fitnessRegex = re.search("^\d+(\.\d*)?", analyzeOutputFile, re.MULTILINE)
         return float(fitnessRegex.group(0))
         
-    def get_sequence_with_mutation_reverted(genotype, mutation):
-        #@TODO
-        pass
+
