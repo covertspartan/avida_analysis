@@ -5,10 +5,9 @@ import asexual_lineage
 
 class MutationEvaluator:
 
-    def __init__(self, pathToAvida = (os.path.curdir + os.path.sep), path_to_lineage)
+    def __init__(self, pathToAvida = (os.path.curdir + os.path.sep)):
         self.pathToAvida = pathToAvida
-        self.lineage = asexual_lineage.cASexualLineage(path_to_lineage)
-        self.lineage.update_with_child()
+        
 
     def evaluate_effect_of_mutation(self, child_genotype, parent_genotype):
         genotypeFitness = self.get_fitness_of_sequence(child_genotype)
