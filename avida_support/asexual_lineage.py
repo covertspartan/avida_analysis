@@ -105,7 +105,7 @@ class cASexualLineage():
                 if count == 0:
                     self._Ancestor = ID
                 count += 1
-                
+            
         if ID != None: #did the damn thing actually work?
             self._Dom = ID#then, in theory, the last genome is the final dominant!
 
@@ -129,7 +129,7 @@ class cASexualLineage():
 
     def update_with_child(self):
         child_ID = self._Dom
-        self.lin_[child_ID]["child"] = None
+        self._lin[child_ID]["child"] = None
         parent_ID = self._lin[child_ID].get("parent")
         while parent_ID != '0':
             #print type(self._lin[parent_ID])
