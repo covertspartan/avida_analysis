@@ -30,7 +30,7 @@ class cASexualLineage():
 
     ### Function - cASexualLineage::__init__
     ### Purpose  - Instasiate an asexual lineage, either from scratch or from a 
-    ### Input    - An optional detailDump containing a lineage from Avida analyze mode
+    ### Input    - An optional detailDump containing a lineage from Avida analyze mode should be a lineage that is already traced not detailx.spop
     ### Output   - a cASexualLineage object
     def __init__ (self, detailDump=None):
         self._lin = {} #dictionary which will contain the lineage

@@ -81,10 +81,10 @@ def build_leap_array(files,lineage_path, lineage_string):
     return sum(new_arr,axis=0), sum(new_arr,axis=1)
 
 
-treat_str = ["XtoXE-", "XtoXN-", "XtoXEstructured-", "XtoXNstructured-", "XtoXEreverted-","XtoXNreverted-", "XtoXEstructuredReversion-","XtoXNstructuredRev-"]
+treat_str = ["XtoXE-", "XtoXN-", "XtoXEstructured-", "XtoXNstructured-"]#, "XtoXEreverted-","XtoXNreverted-", "XtoXEstructuredReversion-","XtoXNstructuredRev-"]
 
-lineage_path = ["/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]
-lineage_string = ["lineageXE_", "lineageXN_", "lineage_struct_XE_", "lineage_struct_XN_", "lineageXErev_", "lineageXNrev_", "lineageXtoXEstructuredRev_", "lineageXtoXNstructureRev_"]
+lineage_path = ["/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]#, "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]
+lineage_string = ["lineageXE_", "lineageXN_", "lineage_struct_XE_", "lineage_struct_XN_"]#, "lineageXErev_", "lineageXNrev_", "lineageXtoXEstructuredRev_", "lineageXtoXNstructureRev_"]
 
 #lin = cASexualLineage("/home/covertar/Data/asex_sbt/raw_data/SBT_100sp_00005mr_250ku_lc_l50_25p_fl_fi/lineage.SBT_100sp_00005mr_250ku_lc_l50_25p_fl_fi3220500.dat")
 
@@ -114,26 +114,26 @@ rcParams['axes.color_cycle']= ['r','b','k','c']
 #print lowess(numpy.float(arange(0,199)),array(leap_arr, numpy.float)[0,0:199])
 fig = figure()
 
-pl1 = fig.add_subplot(211)
+pl1 = fig.add_subplot(111)
 ylim([0,20])
 ylabel("Lineage is Dominant?")
 
-pl2 = fig.add_subplot(212)
+#pl2 = fig.add_subplot(212)
 xlabel("Updates (x1,000)")
 ylabel("Lineage is Dominant?")
 xlim([0,100])
 ylim([0,20])
 
 pl1.plot(transpose(leap_arr[:4])[0:99,:])
-pl2.plot(transpose(leap_arr[4:])[0:99,:])
+#pl2.plot(transpose(leap_arr[4:])[0:99,:])
 
 pl1.legend(("XE", "XN", "XEstructured", "XNstructured"),loc=1)
-pl2.legend(("XEreversion", "XNreversion", "XEstructuredReversion", "XNstructuredReversion"),loc=9)
+#pl2.legend(("XEreversion", "XNreversion", "XEstructuredReversion", "XNstructuredReversion"),loc=9)
 replace_box()
 savefig("leap_frog_line.svg")
 figure()
 rcParams['lines.linewidth'] = 2
-data = [area_arr[i] for i in range(len(area_arr)/2)]
+data = [area_arr[i] for i in range(len(area_arr))]
 boxplot(data)
 xticks([1,2,3,4], ['XE','XN', "XESt", "XNSt"])
 ylabel("area")
