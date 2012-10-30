@@ -1,7 +1,7 @@
 import os
 import re
 import asexual_lineage
-#Testing for updates
+
 
 class MutationEvaluator:
 
@@ -33,7 +33,7 @@ class MutationEvaluator:
 
     def write_sequence_to_avida_analyze_file(self, sequence):
         analyzeFilePath = self.pathToAvida + "analyze.cfg"
-        output = 'LOAD_SEQUENCE {0}\nRECALCULATE\nDETAIL detail.dat fitness'.format(sequence)
+        output = 'LOAD_SEQUENCE {0}\nRECALCULATE\nDETAIL data/detail.dat fitness'.format(sequence)
         #if(os.path.exists(analyzeFilePath)):
             #os.remove(analyzeFilePath)
         fp = open(analyzeFilePath, 'w')
@@ -41,7 +41,9 @@ class MutationEvaluator:
         fp.close()
 
     def run_avida_in_analyze_mode(self):
-        command = self.pathToAvida + "avida -a > /dev/null 2> /dev/null"
+        #The directory that runs python command needs to contain avida.cfg
+        #Recommend to make a base avida directory with necessary *.cfg files
+        command = self.pathToAvida + "avida -a  > /dev/null 2> /dev/null"
         os.system(command)
 
     def get_fitness_from_analyze_output_file(self):
