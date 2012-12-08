@@ -57,3 +57,25 @@ def replace_box(mls="k-",mlw=2):
     return None
 
        
+def format_boxes_presentation(b):
+    print b.viewkeys()
+    _chg_line(b['whiskers'],'c','-',3)
+    _chg_line(b['boxes'],'c','-',3)
+    _chg_line(b['caps'],'c','-',3)
+    _chg_line(b['fliers'],'c','None',3)
+
+    _chg_line(b['medians'],'y','-',3)    
+
+    replace_box(mlw=4)
+
+    grid('off')
+
+
+
+### helper function, do not call form outside plot support
+def _chg_line(line_list,nColor = "b", nLinestyle = "-", nWidth = 1):
+    for l in line_list:
+        l.set_color(nColor)
+        l.set_linestyle(nLinestyle)
+        l.set_linewidth(nWidth)
+    return None
