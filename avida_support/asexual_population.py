@@ -33,10 +33,11 @@ class cASexualPopulation():
         self._size = 0 #size of the dictionary
         self._Dom = None #ID of the dominant genotype
         self._Ancestor = None #ID of the Ancestor
+        self._fields = fields
 
         #do we have a detail dump? If so, load that puppy up!
         if detailDump != None:
-            self._load_detail_lineage_file(detailDump,fields)
+            self._load_detail_lineage_file(detailDump)
 
     ### Function - cASexualLineage::__str__
     ### Purpose  - Dump the lineage as a string
@@ -72,7 +73,12 @@ class cASexualPopulation():
     ### Purpose  - Load an asexual lineage entry into the self._lin
     ### Input    - filename of a detail dump (.dat or .gz)
     ### Output   - None -- updates this object
-    def _load_detail_lineage_file(self, detailDump,fields):
+    def _load_detail_lineage_file(self, detailDump,fields=None):
+
+        #backwords compatablility
+        if fields == None:
+            fields = self._fields
+
         fp = None #file pointer -- need to detrmine if we need 
         if(detailDump[-2:] == "gz"):
             fp = gzip.open(detailDump) #open a gziped file
@@ -140,7 +146,11 @@ class cASexualPopulation():
     ### Purpose  - Load an asexual lineage entry into the self._lin
     ### Input    - 
     ### Output   - 
-    def _add_entry(self,raw,fields):
+    def _add_entry(self,raw,fields = None):
+        #backwords compatablility
+        if fields == None:
+            fields = self._fields
+
         if self[raw[0]] == None:
             #self._lin[raw[0]] = {"parent":raw[1], "raw":raw}            
             self._lin[raw[0]] = {}
