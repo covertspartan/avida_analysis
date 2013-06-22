@@ -73,16 +73,16 @@ def latex_plot():
     return None
     
        
-def format_boxes_presentation(b):
+def format_boxes_presentation(b,mcolor='y'):
     print b.viewkeys()
     _chg_line(b['whiskers'],'c','-',4)
     _chg_line(b['boxes'],'c','-',4)
     _chg_line(b['caps'],'c','-',4)
     _chg_line(b['fliers'],'c','None',4)
 
-    _chg_line(b['medians'],'y','-',3)    
+    _chg_line(b['medians'],mcolor,'-',3)    
 
-    #replace_box(mlw=4)
+    replace_box(mlw=4)
 
     grid('off')
 
