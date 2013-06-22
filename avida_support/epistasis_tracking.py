@@ -8,7 +8,7 @@ class EpistasisTracker:
         self.lineage = asexual_lineage.cASexualLineage(path_of_files_to_trace)
         self.lineage.update_with_child()
         self.evaluator = evaluator.MutationEvaluator("/home/jmc4939/BaseAvida/")
-        writefile = "EpistsasisOccurenceNoStruct{}.txt".format(rep_number)
+        writefile = "./NORcontrol/EpistsasisOccurenceNOR{}.txt".format(rep_number)
         self.pointer = open(writefile, "w")
 
     def identify_deleterious_steps(self):

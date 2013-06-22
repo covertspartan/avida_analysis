@@ -45,7 +45,7 @@ def build_leap_array(files,lineage_path, lineage_string):
         #seed number
         nums = re.findall("-[0-9]+/",f)
         num = nums[0][1:-1]
-        if int(num) > 640:
+        if int(num) >= 640:
             continue
         else:
             place = int(num)%80
@@ -61,41 +61,36 @@ def build_leap_array(files,lineage_path, lineage_string):
             treatment[place].append(n)
             sum_points[place].append(s)
 
-        #complie the arrays for each treatment into one
-        #trim the first and last values which are always 100%
-    for replicate in treatment:
-        add_array = [0 for _ in range(len(replicate[0]))]
-        for individual in replicate:
-            for time_point in range(len(individual)):
-                add_array[time_point] += float(individual[time_point])
-        #add_array = [add_array[n]/8.0 for n in range(len(add_array))]
-        add_array = array(add_array)/8.0
-        #print add_array
-        new_arr.append(add_array[1:-1])
-
-    #print sum(new_arr,axis=0), sum(new_arr,axis=1)
-    #print sum(new_arr,axis=0).shape, sum(new_arr,axis=1).shape
-    #quit()
+    print len(sum_points)
+    print len(sum_points[0])
     
-    #return a sum at each time point
-    return sum(new_arr,axis=0), sum(new_arr,axis=1)
+    #average within each random seed
+    avg_arr = []
+    for rep in sum_points:
+        avg_arr.append(sum(rep)/8.0)
+
+    #boxplot(99-array(avg_arr))
+    
+    return array(avg_arr), 99-array(avg_arr)
+
+    #return sum(new_arr,axis=0), sum(new_arr,axis=1)
 
 
-treat_str = ["XtoXE-", "XtoXN-", "XtoXEstructured-", "XtoXNstructured-"]#, "XtoXEreverted-","XtoXNreverted-", "XtoXEstructuredReversion-","XtoXNstructuredRev-"]
+treat_str = ["XtoXE-", "XtoXN-", "XtoXEstructured-", "XtoXNstructured-"]
 
-lineage_path = ["/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]#, "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]
-lineage_string = ["lineageXE_", "lineageXN_", "lineage_struct_XE_", "lineage_struct_XN_"]#, "lineageXErev_", "lineageXNrev_", "lineageXtoXEstructuredRev_", "lineageXtoXNstructureRev_"]
-
-#lin = cASexualLineage("/home/covertar/Data/asex_sbt/raw_data/SBT_100sp_00005mr_250ku_lc_l50_25p_fl_fi/lineage.SBT_100sp_00005mr_250ku_lc_l50_25p_fl_fi3220500.dat")
+lineage_path = ["/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/LocalExperiments/lineages/", "/Data/Jared/structure/lineages/", "/Data/Jared/structure/lineages/"]
+lineage_string = ["lineageXE_", "lineageXN_", "lineage_struct_XE_", "lineage_struct_XN_"]
 
 leap_arr = []
 area_arr = []
 
 for i, s in enumerate(treat_str):
-        
+    print i+1, s[:-1]
     #find all the treatments we have dominant.dat files for
-    if s[5] != "s":
+    if (i==0) or (i==1):
         files = find_replicates(s, "dominant.dat","/Data/Jared/LocalExperiments")
+    elif (i==2) or (i==3):
+        files = find_replicates(s, "dominant.dat","/Data/Jared/structure")
     else:
         files = find_replicates(s, "dominant.dat","/Data/Jared/structure")
     #get all of the results
@@ -103,42 +98,26 @@ for i, s in enumerate(treat_str):
     leap_arr.append(l)
     area_arr.append(n)
 
-area_arr = 99 - array(area_arr)
-print area_arr.ndim, area_arr.shape
-print f_oneway(*area_arr)
-print ttest_ind(area_arr[0,:],area_arr[1,:])
-print ttest_ind(area_arr[0,:],area_arr[2,:])
-print ttest_ind(area_arr[0,:],area_arr[3,:])
-rcParams['axes.color_cycle']= ['r','b','k','c']
 
-#print lowess(numpy.float(arange(0,199)),array(leap_arr, numpy.float)[0,0:199])
-fig = figure()
-
-pl1 = fig.add_subplot(111)
-ylim([0,20])
-ylabel("Lineage is Dominant?")
-
-#pl2 = fig.add_subplot(212)
-xlabel("Updates (x1,000)")
-ylabel("Lineage is Dominant?")
-xlim([0,100])
-ylim([0,20])
-
-pl1.plot(transpose(leap_arr[:4])[0:99,:])
-#pl2.plot(transpose(leap_arr[4:])[0:99,:])
-
-pl1.legend(("XE", "XN", "XEstructured", "XNstructured"),loc=1)
-#pl2.legend(("XEreversion", "XNreversion", "XEstructuredReversion", "XNstructuredReversion"),loc=9)
-replace_box()
-savefig("leap_frog_line.svg")
-figure()
+fig2 = figure()
 rcParams['lines.linewidth'] = 2
-data = [area_arr[i] for i in range(len(area_arr))]
-boxplot(data)
-xticks([1,2,3,4], ['XE','XN', "XESt", "XNSt"])
-ylabel("area")
+data = area_arr
 
-savefig("leap_frog_boxplot.svg")
+pl1 = fig2.add_subplot(121)
+pl1.boxplot([data[0],data[2]])
+xticks([1,2],['XE','XEStructured'])
+ylabel("Leapfrog Events", horizontalalignment='center' )
+ylim(88,100)
+replace_box()
+
+pl2 = fig2.add_subplot(122)
+pl2.boxplot([data[1],data[3]])
+xticks([1,2],['XN','XNStructured'])
+ylim(88,100)
+replace_box()
+
+savefig("leap_frog_boxplotXEN.svg")
+show()
 #xticks([8,16,24,32,40],('$\\textbf{25}$','$\\textbf{50}$','$\\textbf{100}$','$\\textbf{150}$','$\\textbf{200}$','$\\textbf{200}$'))
 #xticks([8,16,24,32,40],('50','100','150','200','250'))
 #xticks([40,80,120,160,200],('50','100','150','200','250'))
@@ -147,4 +126,4 @@ savefig("leap_frog_boxplot.svg")
 #show()    
 #savefig("leap_frog_figReversion.svg")
 #print lin[1,"parent"]
-show()
+

@@ -82,6 +82,7 @@ def format_boxes_presentation(b,mcolor='y'):
 
     _chg_line(b['medians'],mcolor,'-',3)    
 
+    #turn off boxes in our plots
     replace_box(mlw=4)
 
     grid('off')
