@@ -22,7 +22,7 @@ def find_replicates(treat_prefix, dat_file, p="."):
 
     # combined search string
     # assumes that seed # is not specified
-    searchStr = treat_prefix+".*-[0-9]*/data"
+    searchStr = treat_prefix+".*[-_][0-9]*/data"
 
     #debugging output
     #print "Searching directory {0:s}".format(os.path.abspath(p))
@@ -31,7 +31,6 @@ def find_replicates(treat_prefix, dat_file, p="."):
     for path, names, filename in os.walk(p,False):
         
         sPath = re.search(searchStr, path)
-
         #debugging output
         #print "Examining {0:s}".format(path)
 
