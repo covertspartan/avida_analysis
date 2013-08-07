@@ -32,7 +32,6 @@ def find_replicates(treat_prefix, dat_file, p="."):
     for path, names, filename in os.walk(p,False):
         
         sPath = re.search(searchStr, path)
-
         #debugging output
         #print "Examining {0:s}".format(path)
 
