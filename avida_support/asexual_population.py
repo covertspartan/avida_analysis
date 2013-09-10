@@ -28,7 +28,7 @@ class cASexualPopulation():
     ### Purpose  - Instasiate an asexual lineage, either from scratch or from a 
     ### Input    - An optional detailDump containing a lineage from Avida analyze mode should be a lineage that is already traced not detailx.spop
     ### Output   - a cASexualLineage object
-    def __init__ (self, detailDump=None,fields={"parent":3,"living":4}):
+    def __init__ (self, detailDump=None,fields={"Sparent":3,"Iliving":4}):
         self._lin = {} #dictionary which will contain the lineage
         self._size = 0 #size of the dictionary
         self._Dom = None #ID of the dominant genotype
@@ -154,8 +154,14 @@ class cASexualPopulation():
         if self[raw[0]] == None:
             #self._lin[raw[0]] = {"parent":raw[1], "raw":raw}            
             self._lin[raw[0]] = {}
+            #someday will do this with regexp
             for x in fields:
-                self._lin[raw[0]][x] = raw[fields[x]]
+                if x[0] == 'S':
+                    self._lin[raw[0]][x[1:]] = raw[fields[x]]
+                elif x[0] == 'F':
+                    self._lin[raw[0]][x[1:]] = float(raw[fields[x]])
+                elif x[0] == 'I':
+                    self._lin[raw[0]][x[1:]] = int(raw[fields[x]])
             self._lin[raw[0]]['raw'] = raw
             return True
         else:
@@ -171,6 +177,7 @@ class cASexualPopulation():
     ### Output   - 
     def trace_line_of_descent(self):
         child_ID = self._Dom
+        print self[child_ID]
         self._lin[child_ID]["child"] = None
         parent_ID = self._lin[child_ID].get("parent")
         while parent_ID != '(none)':
