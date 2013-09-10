@@ -2,7 +2,7 @@ from avida_support.asexual_population import *
 from avida_support.evaluator import *
 
 #create an asexual population
-lineage = cASexualPopulation("avida_files/data/detail-10000.spop",fields={"parent":3,"living":4,"genome":16})
+lineage = cASexualPopulation("avida_files/data/detail-10000.spop",fields={"parent":3,"Iliving":4,"Sgenome":16})
 
 #need an evaluator instance to run landscaping
 evaluator = MutationEvaluator("avida_files/")
