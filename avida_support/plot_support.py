@@ -16,7 +16,7 @@ def dom_fitness(dom_files):
 
     #list of lists 
     return trt
-
+#plot all treatment lines with the grand median in bold
 def plot_all_treats(trt,lwidth=1):
     print trt.shape
     m = trt.shape[1]
