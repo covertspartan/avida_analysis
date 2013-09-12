@@ -177,7 +177,7 @@ class cASexualPopulation():
     ### Output   - 
     def trace_line_of_descent(self):
         child_ID = self._Dom
-        print self[child_ID]
+        #print self[child_ID]
         self._lin[child_ID]["child"] = None
         parent_ID = self._lin[child_ID].get("parent")
         while parent_ID != '(none)':
