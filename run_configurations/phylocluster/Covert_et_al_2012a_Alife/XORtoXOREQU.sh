@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # SGE Options
@@ -13,6 +12,9 @@
 ##how many to run?
 ##These numbers correspond directly to the random number seed
 #$ -t 1-200
+
+##only do a few at a time -- don't want to overload the cluster
+#$ -tc 20
 
 ##Which computes nodes to run on.
 ##This should never change unless Art tells you so
