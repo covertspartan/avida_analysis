@@ -28,7 +28,7 @@ class cASexualPopulation():
     ### Purpose  - Instasiate an asexual lineage, either from scratch or from a 
     ### Input    - An optional detailDump containing a lineage from Avida analyze mode should be a lineage that is already traced not detailx.spop
     ### Output   - a cASexualLineage object
-    def __init__ (self, detailDump=None,fields={"Sparent":3,"Iliving":4}):
+    def __init__ (self, detailDump=None,fields={"Sparent":3,"Iliving":4}, histDump = None):
         self._lin = {} #dictionary which will contain the lineage
         self._size = 0 #size of the dictionary
         self._Dom = None #ID of the dominant genotype
@@ -38,6 +38,10 @@ class cASexualPopulation():
         #do we have a detail dump? If so, load that puppy up!
         if detailDump != None:
             self._load_detail_lineage_file(detailDump)
+            
+            #legacy for old historic dumps
+            if histDump != None:
+                self._load_detail_lineage_file(histDump)
 
     ### Function - cASexualLineage::__str__
     ### Purpose  - Dump the lineage as a string
@@ -64,7 +68,6 @@ class cASexualPopulation():
 
     def __len__(self):
         return self._size
-
 
     def get_final_dom(self):
         return self._Dom
@@ -180,7 +183,7 @@ class cASexualPopulation():
         print self[child_ID]
         self._lin[child_ID]["child"] = None
         parent_ID = self._lin[child_ID].get("parent")
-        while parent_ID != '(none)':
+        while parent_ID != '(none)' and parent_ID != '-1':
             #print type(self._lin[parent_ID])
             #print parent_ID, self._lin[parent_ID]
             self._lin[parent_ID]["child"] = child_ID
