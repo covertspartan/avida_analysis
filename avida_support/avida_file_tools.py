@@ -1,3 +1,4 @@
+
  ####################################
  # Avida Analysis Toolkit - v 0.1   #
  # A. W. Covert III, Ph. D          #
@@ -80,7 +81,7 @@ def dump_flat_file(data, fp):
 
 ### return a given column from a standard avida file
 ### asssuming floating point data
-def get_column(file,col):
+def get_column(file,col,d=" "):
 
     #list of stuff to return
     stuff = []
@@ -105,7 +106,7 @@ def get_column(file,col):
 
         #make sure the line starts with a column
         if(re.search("^[0-9]+", line) != None):
-            stuff.append(float(re.split(" ",line)[col-1]))
+            stuff.append(float(re.split(d,line)[col-1]))
 
     return stuff
 

@@ -13,7 +13,7 @@ import asexual_lineage
 #@TODO: More analyze mode commands
 #@TODO: Test framework for analyze mode commands
 
-
+#A change
 class MutationEvaluator:
 
     def __init__(self, pathToAvida = (os.path.curdir + os.path.sep)):
@@ -68,7 +68,7 @@ class MutationEvaluator:
         analyzeFilePath = self.pathToAvida + "analyze.cfg"
         output = ""
         if script == "":
-            output = 'LOAD_SEQUENCE {0}\nRECALCULATE\nDETAIL data/detail.dat fitness'.format(sequence)
+            output = 'LOAD_SEQUENCE {0}\nRECALCULATE\nDETAIL detail.dat fitness'.format(sequence)
         else:
             output = script.format(sequence)
         
@@ -83,6 +83,7 @@ class MutationEvaluator:
         #Recommend to make a base avida directory with necessary *.cfg files
         origin = os.path.abspath(".")
         os.chdir(self.pathToAvida)
+        if (debug): print os.path.abspath(".")
         command = "./avida -a -s {0:d}  > /dev/null 2> /dev/null".format(seed)
         if(debug):
             command = "./avida -a -s {0:d}".format(seed)
@@ -93,11 +94,18 @@ class MutationEvaluator:
         return None
 
     def get_fitness_from_analyze_output_file(self):
-        outputFilePath = self.pathToAvida + "data" + os.path.sep + 'detail.dat'
+        #where is the file?
+        outputFilePath = self.pathToAvida + "/data" + os.path.sep + 'detail.dat'
+
+        #get the data from the file
         fp = open(outputFilePath)
         analyzeOutputFile = fp.read()
         fp.close()
+
+        #should be one floating point number
         fitnessRegex = re.search("^\d+(\.\d*)?", analyzeOutputFile, re.MULTILINE)
+        #remove the output file so we don't accidently read it twice
+        os.remove(outputFilePath)
         return float(fitnessRegex.group(0))
         
 
