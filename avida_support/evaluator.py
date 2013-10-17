@@ -64,6 +64,16 @@ class MutationEvaluator:
         self.run_avida_in_analyze_mode()
         return self.get_fitness_from_analyze_output_file()
 
+    #get the basic fitness, but run the org a thousand times with random inputs and check it's phenotype
+    def get_phenotype_fitness_of_sequence(self, sequence):
+        script = 'LOAD_SEQUENCE {0}\nRECALC use_random_inputs\nDETAIL detail.dat fitness num_trials phen_avg_fitness phen_entropy'.format(sequence)
+        self.write_sequence_to_avida_analyze_file(sequence, script)
+
+        self.run_avida_in_analyze_mode()
+
+        return self._get_phenotype_fitness()
+
+
     def write_sequence_to_avida_analyze_file(self, sequence,script = ""):
         analyzeFilePath = self.pathToAvida + "analyze.cfg"
         output = ""
@@ -93,6 +103,8 @@ class MutationEvaluator:
         os.chdir(origin)
         return None
 
+
+    #@TODO: all these get commands need to be refactored
     def get_fitness_from_analyze_output_file(self):
         #where is the file?
         outputFilePath = self.pathToAvida + "/data" + os.path.sep + 'detail.dat'
@@ -122,8 +134,19 @@ class MutationEvaluator:
                 raw = re.split(" ",line.strip())
                 os.remove(output_file)
                 return float(raw[9]),float(raw[13])
-                #print raw
-                #quit()
 
-    
+    def _get_phenotype_fitness(self, filename = "detail.dat"):
+        output_file = self.pathToAvida + "data" + os.path.sep + filename
+        if not os.path.exists(output_file):
+            return None,None,None,None
+        fp = open(output_file)
+        analyzeOutputFile = fp.readlines()
+        fp.close()
+        #print analyzeOutputFile
+        for line in analyzeOutputFile:
+            if(re.search("^\-?[0-9]+", line) != None):
+                raw = re.split(" ",line.strip())
+                os.remove(output_file)
+                return float(raw[0]),int(raw[1]),float(raw[2]),float(raw[3])
+
             
