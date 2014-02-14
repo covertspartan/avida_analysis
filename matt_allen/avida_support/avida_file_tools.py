@@ -81,34 +81,32 @@ def dump_flat_file(data, fp):
 
 ### return a given column from a standard avida file
 ### asssuming floating point data
-def get_column(file, col, *args, **kwargs):
-    #get delimeter using kwargs so that we can use variable arguments for the columns
-    d = kwargs.get("d", " ")
-    #get a list of all the columns specified, including the required ones and any additional
-    cols = [col] + list(args)
-    
+def get_column(file,col,d=" "):
+
     #list of stuff to return
     stuff = []
 
-    #find the correct way to open the file
-    opener = open
+
+
+    #open a file
+    fp = None
     if(file[-2:] == "gz"):
-        opener = gzip.open
+        fp = gzip.open(file)
+    else:
+        fp = open(file)
 
-    #open the file safely
-    with opener(file) as fp:
-        #each line contains a treatement
-        for line in fp:
+    #dump the entire file into 'data'
+    data = fp.readlines()
 
-            #make sure the line starts with a column
-            if(re.search("^[0-9]+", line) != None):
-                split = re.split(d,line)
-                #if we have one column just return its data
-                if len(cols) == 1:
-                    stuff.append(float(split[cols[0]-1]))
-                #otherwise return a list of data lists
-                else:
-                    stuff.append([float(split[col-1]) for col in cols])
+    #close the filepointers
+    fp.close()
+
+    #each line contains a treatement
+    for line in data:
+
+        #make sure the line starts with a column
+        if(re.search("^[0-9]+", line) != None):
+            stuff.append(float(re.split(d,line)[col-1]))
 
     return stuff
 
@@ -133,13 +131,20 @@ def get_row(file, row):
     #close the filepointers
     fp.close()
 
-    raw = re.findall("\-?[0-9]+\.?[0-9]*",data[row])
-    #print raw
-    for num in raw:
-        if num != '':
-            stuff.append(float(num))
+    #each line contains a treatement
+    for ln in range(0,len(data)):
+        raw = []
+        if ln == row:
+            #print data[ln]
+            raw = re.findall("\-?[0-9]+\.?[0-9]*",data[ln])
+            #print raw
+            for num in raw:
+                if num != '':
+                    stuff.append(float(num))
 
-    return stuff
+            #print stuff
+
+            return stuff
 
 
 ### Grab all floating point data from a flat file
