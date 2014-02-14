@@ -1,0 +1,7 @@
+This is a trace parser and viewer for the Avida BCR hardware. 
+The viewer currently requires a trace file to run, other files are optional but are necessary for some features to work.
+Usage: python viewer.py -t <tracefile> -g <genomefile> -r <resourcefile> -e <environmentfile> -s <settingsfile>
+
+settings.cfg contains various settings for the viewer, including all of the file arguments and the type of trace being run.
+
+

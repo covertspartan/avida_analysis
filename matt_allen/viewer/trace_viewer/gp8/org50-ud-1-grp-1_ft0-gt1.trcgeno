@@ -1,0 +1,128 @@
+# Sun Sep 22 17:08:47 2013
+# Filename........: minitraces/trace_genomes/org50-ud-1-grp-1_ft0-gt1.trcgeno
+# Update Output...: N/A
+# Is Viable.......: 0
+# Repro Cycle Size: 0
+# Depth to Viable.: -1
+# 
+# Generation: 0
+# Merit...........: 101.000000
+# Gestation Time..: 0
+# Fitness.........: 0.000000
+# Errors..........: 0
+# Genome Size.....: 101
+# Copied Size.....: 101
+# Executed Size...: 101
+# Offspring.......: NONE
+# 
+# Tasks Performed:
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+# eat-target 0 (0.000000)
+
+
+promoter
+zero
+promoter
+search-lbl-s
+if-gtr-0
+nop-C
+push-all
+sense-nest
+jmp-head
+nop-C
+shift-l
+nop-C
+nop-C
+promoter
+look-again-ex
+nop-C
+if-less-0
+nop-C
+maxint
+if-n-equ
+rotate-x
+move
+nop-C
+nop-C
+nop-C
+nop-C
+nop-C
+label
+rotate-x
+promoter
+nop-C
+nop-C
+nop-C
+nop-C
+look-again-ex
+nop-C
+nop-C
+nop-C
+nop-C
+did-copy-lbl
+nop-C
+did-copy-lbl
+if-less
+swap-stk
+nop-E
+nop-C
+nop-C
+nop-C
+nop-C
+set-forage-target
+nop-C
+nop-C
+nop-C
+nop-C
+if-less
+get-north-offset
+nop-C
+nop-C
+zero
+eat
+maxint
+rand
+get-north-offset
+divide-memory
+nop-C
+terminator
+nop-C
+nop-C
+promoter
+shift-l
+shift-r
+if-n-equ
+nop-F
+push
+nop-C
+nop-C
+eat
+get-forage-target
+nop-C
+nop-C
+search-lbl-d
+get-forage-target
+nop-G
+promoter
+set-memory
+rotate-x
+search-lbl-s
+move
+h-copy
+did-copy-lbl
+nop-A
+nop-B
+if-equ-0
+mov-head
+promoter
+eat
+divide-memory
+terminator
+label
+nop-A
+nop-B
