@@ -12,6 +12,7 @@ import Queue
 import threading
 import json
 import functools
+import copy
 from trace_viewer.labelvalue import LabelValue
 from lineage import Lineage
 from avida_support.asexual_population import cASexualPopulation
@@ -185,6 +186,8 @@ class LineageViewer(Tk.Frame):
                                              path=self.settings['pathtoavida'], app=self,
                                              data=self.lineage_data, daemon=True)
                 thread.start()
+
+            self.lineage.update_all()
                     
         
     def load_data(self, data=None):
@@ -409,12 +412,16 @@ class LineageViewer(Tk.Frame):
         """
         Spawn a new lineage viewer window to display a sub-lineage.
 
-        @param data: the list of genomes to display in the new window.
+        @param data: The list of genomes to display in the new window.
+                     A deep copy is performed on the data so that changes 
+                     in the new window do not propogate to the current window.
         """
+        new_data = copy.deepcopy(data)
+
         window = Tk.Toplevel()
         app = LineageViewer(window, self.settings, analyze_lock=self.analyze_lock)
         app.pack(fill=Tk.BOTH, expand=True)
-        app.load_data(data=data)
+        app.load_data(data=new_data)
         app.initialize()
         app.after(100, app.update_analyze)
 
