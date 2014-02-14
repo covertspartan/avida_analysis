@@ -1,0 +1,12 @@
+Avida Lineage Viewer
+To use the lineage viewer to analyze an Avida detail dump, enter 'python lineageviewer.py -d <detailfile.spop>'.
+You can also open the lineage viewer to analyze sub-lineages or edited genomes saved to JSON format by entering 'python lineageviewer.py -j <jsonfile.json>'.
+These settings override those found in 'settings.cfg', which can be used to configure the viewer and choose an input file. Settings.cfg contains fields for a detail dump and json file, only one of which should be present at any one time. The unused option can be commented out with the '#' character. It also contains settings for the path to the Avida directory used to analyze genomes, and the tasks that were present in the environment for the run.
+
+Lineages can also be loaded from the viewer GUI, using the file menu to select the appropriate file, which will open in a new window. Sub lineages can be created by selecting a range of genomes and choosing either 'Save Selected' or 'New window from selection' in the file menu.
+
+Genomes can be edited using three methods. 'Edit' changes the currently selected genome only. 'Edit All' changes applies a change to all genomes in the current lineage. 'Edit Selected' applies a change to only the selected genomes. These options can be used to effectively revert or insert mutations into a lineage. Changes made will trigger Avida analyze mode to re-analyze the affected genomes, which may require a short delay.
+
+The options menu allows the user to toggle between absolute and relative fitness color coding. Relative fitness coloring chooses colors on a gradient between green for neutral mutations and blue and red for beneficial and deleterious mutations, respectively. Absolute coloring chooses only completely green, completely blue, or completely red.
+
+The columns menu allows the user to toggle any of the columns in the lineage list view. This can reduce clutter and improve readability.
