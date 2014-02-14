@@ -449,6 +449,9 @@ def main(argv):
                               'or with the -d option')
         return 1
 
+    #fix for the trailing slash bug, makes sure the path to avida registers as a directory
+    if settings['pathtoavida']:
+        settings['pathtoavida'] = os.path.join(settings['pathtoavida'], '')
 
     lock = threading.Lock()
     main = Tk.Tk()
