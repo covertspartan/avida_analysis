@@ -132,16 +132,20 @@ class Genotype(Tk.Frame):
         tasks = self.data.get('task_list')
         parent_tasks = self.parent_data.get('task_list')
         if tasks is not None:
-            delta = ''
-            if parent_tasks is not None:
+            if self.settings['deltatasks']:
+                delta = ''
+                if parent_tasks is not None:
 
-                if tasks != parent_tasks:
-                    for t, p, task in zip(tasks, parent_tasks, self.settings['tasks']):
-                        if t != p:
-                            sign = '+' if t == '1' else '-'
-                            delta += ' ' + sign + task
-                    
-            self.task_var.set(delta)
+                    if tasks != parent_tasks:
+                        for t, p, task in zip(tasks, parent_tasks, self.settings['tasks']):
+                            if t != p:
+                                sign = '+' if t == '1' else '-'
+                                delta += ' ' + sign + task
+
+                self.task_var.set(delta)
+            else:
+                labels = [task for t, task in zip(tasks, self.settings['tasks']) if t == '1']
+                self.task_var.set(' '.join(labels))
 
     def update_color(self, selected_fitness=None, absolute=False, parent=False):
         """

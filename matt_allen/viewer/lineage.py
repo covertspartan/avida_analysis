@@ -181,3 +181,4 @@ class Lineage(Element):
         """
         for g in self.genotypes:
             g.update()
+            g.update_tasks()

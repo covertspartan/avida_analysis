@@ -45,6 +45,9 @@ class LineageViewer(Tk.Frame):
         self.parent = parent
         if self.settings.get('abscolor') is None:
             self.settings['abscolor'] = False
+
+        if self.settings.get('deltatasks') is None:
+            self.settings['deltatasks'] = False
         
 
         self.queue = Queue.Queue()
@@ -92,6 +95,8 @@ class LineageViewer(Tk.Frame):
         tkutils.bind_children(self.parent, '<Control-q>', lambda e: self.parent.destroy())
         
         options_menu.add_checkbutton(label='Absolute Colors', command=self._on_absolute_changed)
+
+        options_menu.add_checkbutton(label='Task Deltas', command=self._on_task_delta_changed)
 
         for column in self.column_settings:
             column_menu.add_checkbutton(label=column['label'], variable=column['var'],
@@ -401,6 +406,13 @@ class LineageViewer(Tk.Frame):
         """
         self.settings['abscolor'] = not self.settings['abscolor']
         self.lineage.update_colors()
+
+    def _on_task_delta_changed(self, *args, **kwargs):
+        """
+        Callback for toggling the task delta mode.
+        """
+        self.settings['deltatasks'] = not self.settings['deltatasks']
+        self.lineage.update_all()
 
     def _on_column_changed(self, *args, **kwargs):
         """
