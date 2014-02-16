@@ -54,16 +54,17 @@ class LineageViewer(Tk.Frame):
         self.analyze_lock = analyze_lock
         self.selected = 0
 
-        columns = [('RF', 3),
-                   ('PF', 3),
-                   ('Genome', 72),
-                   ('Tasks', 11),
-                   ('Organism ID', 10),
-                   ('Fitness', 10)]
+        columns = [('RF', 30, False),
+                   ('PF', 30, True),
+                   ('Genome', 400, True),
+                   ('Tasks', 175, True),
+                   ('Organism ID', 100, False),
+                   ('Fitness', 100, True)]
         self.column_settings = [{'label':label, 'width':width, 'var':Tk.BooleanVar()}
-                                for label, width in columns]
-        for s in self.column_settings:
-            s['var'].set(True)
+                                for label, width, show in columns]
+        for settings, (l, w, show) in zip(self.column_settings, columns):
+            settings['var'].set(show)
+
 
     def initialize(self):
         """

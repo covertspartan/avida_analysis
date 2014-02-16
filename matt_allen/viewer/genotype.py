@@ -62,20 +62,35 @@ class Genotype(Tk.Frame):
                                      fill=self.icon_color, tag='icon')
 
         color = self.cget('bg')
-        self.genome_display = GenomeDisplay(self, self.data['genome'], height=3, bg=color,
+
+        genome_frame = Tk.Frame(self, height=75, width=self.column_settings[2]['width'])
+        genome_frame.grid(row=0, column=2)
+        genome_frame.pack_propagate(False)
+        self.genome_display = GenomeDisplay(genome_frame, self.data['genome'], bg=color,
                                             relief='flat')
-        self.genome_display.grid(row=0, column=2)
+        self.genome_display.pack(fill=Tk.BOTH, expand=True)
 
         self.id_var.set(self.data['id'])
         self.fit_var.set('%0.2f' % self.data['fitness'])
         self.task_var.set('...')
 
-        task_label = Tk.Label(self, textvariable=self.task_var, width=10, anchor='e')
-        task_label.grid(row=0, column=3)
-        id_label = Tk.Label(self, textvariable=self.id_var, width=6, anchor='e')
-        id_label.grid(row=0, column=4)
-        fit_label = Tk.Label(self, textvariable=self.fit_var, width=15, anchor='e')
-        fit_label.grid(row=0, column=5)
+        task_frame = Tk.Frame(self, height=75, width=self.column_settings[3]['width'])
+        task_frame.grid(row=0, column=3)
+        task_frame.pack_propagate(False)
+        task_label = Tk.Message(task_frame, textvariable=self.task_var, anchor='w', width=self.column_settings[3]['width'])
+        task_label.pack(fill=Tk.BOTH, expand=True)
+
+        id_frame = Tk.Frame(self, height=15, width=self.column_settings[4]['width'])
+        id_frame.grid(row=0, column=4)
+        id_frame.pack_propagate(False)
+        id_label = Tk.Label(id_frame, textvariable=self.id_var, anchor='e')
+        id_label.pack(fill=Tk.BOTH, expand=True)
+
+        fit_frame = Tk.Frame(self, height=15, width=self.column_settings[5]['width'])
+        fit_frame.grid(row=0, column=5)
+        fit_frame.pack_propagate(False)
+        fit_label = Tk.Label(fit_frame, textvariable=self.fit_var,  anchor='e')
+        fit_label.pack(fill=Tk.BOTH, expand=True)
         
         self.update_color(self.selected_fitness)
         parent_fitness = self.parent_data.get('fitness')
@@ -83,8 +98,8 @@ class Genotype(Tk.Frame):
         self.update_tasks()
         self.genome_display._diff_text(self.data['genome'], self.parent_data.get('genome'))
         
-        self.columns = [self.rel_canvas, self.par_canvas, self.genome_display,  task_label,
-                        id_label, fit_label]
+        self.columns = [self.rel_canvas, self.par_canvas, genome_frame,  task_frame,
+                        id_frame, fit_frame]
         self._retag(str(self.data['id']), *self.columns)
 
 

@@ -47,10 +47,12 @@ class Lineage(Element):
 
         self.labels = [] 
         for c, column in enumerate(self.column_settings):
-            label = Tk.Label(label_frame, text=column['label'], width=column['width'])
-            label.grid(row=0, column=c)
-            label_frame.columnconfigure(c)
-            self.labels.append(label)
+            frame = Tk.Frame(label_frame, width=column['width'], height=20)
+            frame.grid(row=0, column=c)
+            frame.pack_propagate(False)
+            label = Tk.Label(frame, text=column['label'])
+            label.pack(fill=Tk.BOTH, expand=True)
+            self.labels.append(frame)
         
         self.lineage_frame = VerticalScrolledFrame(self)
         self.lineage_frame.pack(fill=Tk.BOTH, expand=True)
@@ -68,13 +70,15 @@ class Lineage(Element):
 
             
 
-            g.bind('<Button-1>', partial(self._on_pressed, index=index))
-            g.bind('<B1-Motion>', partial(self._on_drag, index=index))
+            tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=index))
+            tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=index))
             self.genotypes.append(g)
 
         tkutils.bind_children(self.parent, '<Button-4>', self.lineage_frame._on_mouse_wheel)
         tkutils.bind_children(self.parent, '<Button-5>', self.lineage_frame._on_mouse_wheel)
         tkutils.bind_children(self.parent, '<MouseWheel>', self.lineage_frame._on_mouse_wheel)
+
+        self.on_column_changed()
         
     def _on_pressed(self, event, index=None):
         """
