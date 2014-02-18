@@ -60,7 +60,7 @@ class LineageViewer(Tk.Frame):
                    ('Tasks', 175, True),
                    ('Organism ID', 100, False),
                    ('Fitness', 100, True),
-                   ('Gestation Time', 100, True),
+                   ('Gestation Time', 100, False),
                    ('Depth', 60, True)]
         self.column_settings = [{'label':label, 'width':width, 'var':Tk.BooleanVar()}
                                 for label, width, show in columns]
@@ -126,7 +126,7 @@ class LineageViewer(Tk.Frame):
         genome_label = Tk.Label(info_frame, text=('Genome (Green = insertion, Blue = mutation, '
                                                   'Red = deletion'))
         genome_label.pack()
-        self.genome_display = GenomeDisplay(info_frame, '', height=3)
+        self.genome_display = GenomeDisplay(info_frame, '', height=6)
         self.genome_display.pack(fill=Tk.X)
 
         data_frame = Tk.Frame(info_frame)
@@ -393,7 +393,7 @@ class LineageViewer(Tk.Frame):
             self.merit_var.set(data['merit'])
             self.gestation_var.set(data['gest_time'])
             self.fitness_var.set(data['fitness'])
-            self.depth_var.set(data['depth'])
+            self.depth_var.set(str(data['depth'] + 1))
             tasks = data.get('task_list')
             if tasks is not None:
                 result = ''

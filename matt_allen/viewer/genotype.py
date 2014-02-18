@@ -79,7 +79,7 @@ class Genotype(Tk.Frame):
         self.fit_var.set('%0.2f' % self.data['fitness'])
         self.task_var.set('...')
         self.gestation_var.set('%0.2f' % self.data['gest_time'])
-        self.depth_var.set(str(self.data['depth']))
+        self.depth_var.set(str(self.data['depth'] + 1))
 
         task_frame = Tk.Frame(self, height=75, width=self.column_settings[3]['width'])
         task_frame.grid(row=0, column=3)
@@ -144,7 +144,7 @@ class Genotype(Tk.Frame):
         self.id_var.set(self.data['id'])
         self.fit_var.set('%0.2f' % self.data['fitness'])
         self.gestation_var.set('%0.2f' % self.data['gest_time'])
-        self.depth_var.set(str(self.data['depth']))
+        self.depth_var.set(str(self.data['depth'] + 1))
 
         self.rel_fitness = 0
         if self.data['fitness'] > 0:

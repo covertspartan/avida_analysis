@@ -76,6 +76,6 @@ class GenomeDisplay(Tk.Text):
             oldmatch = block"""
 
         self.tag_config('diff', foreground='blue', font=tkFont.BOLD)
-        self.tag_config('ins', foreground='green', font=tkFont.BOLD)
+        self.tag_config('ins', foreground='#00CC00', font=tkFont.BOLD)
         self.tag_config('del', foreground='red', font=tkFont.BOLD)
         
