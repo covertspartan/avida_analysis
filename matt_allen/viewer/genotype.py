@@ -54,8 +54,11 @@ class Genotype(Tk.Frame):
         Set up the interface for this widget.
         """
         self.icon_color = '#00ff00'
+
+
+
         self.rel_canvas = Tk.Canvas(self, width=self.icon_size, height=self.icon_size)
-        self.rel_canvas.grid()
+        self.rel_canvas.grid(row=0, column=0)
         self.rel_canvas.create_oval((1, 1, self.icon_size-1, self.icon_size-1), fill=self.icon_color,
                                     tag='icon')
         self.par_canvas = Tk.Canvas(self, width=self.icon_size, height=self.icon_size)
@@ -81,7 +84,8 @@ class Genotype(Tk.Frame):
         task_frame = Tk.Frame(self, height=75, width=self.column_settings[3]['width'])
         task_frame.grid(row=0, column=3)
         task_frame.pack_propagate(False)
-        task_label = Tk.Message(task_frame, textvariable=self.task_var, anchor='w', width=self.column_settings[3]['width'])
+        task_label = Tk.Message(task_frame, textvariable=self.task_var, anchor='w', 
+                                width=self.column_settings[3]['width'])
         task_label.pack(fill=Tk.BOTH, expand=True)
 
         id_frame = self._column_label(4, self.id_var, height=15)
@@ -99,7 +103,7 @@ class Genotype(Tk.Frame):
         self.genome_display._diff_text(self.data['genome'], self.parent_data.get('genome'))
         
         self.columns = [self.rel_canvas, self.par_canvas, genome_frame,  task_frame,
-                        id_frame, fit_frame]
+                        id_frame, fit_frame, gest_frame, depth_frame]
         self._retag(str(self.data['id']), *self.columns)
 
     def _column_label(self, col, var, **kwargs):
