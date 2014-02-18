@@ -132,11 +132,11 @@ class Genotype(Tk.Frame):
 
         self.id_var.set(self.data['id'])
         self.fit_var.set(self.data['fitness'])
+
         self.rel_fitness = 0
         if self.data['fitness'] > 0:
             self.rel_fitness = self.data['fitness'] / self.max_fitness
-        if self.parent_data.get('genome') is not None:
-            self.genome_display.update(self.data['genome'], self.parent_data.get('genome'))
+        self.genome_display.update(self.data['genome'], self.parent_data.get('genome'))
         self.update_color()
         self.update_color(parent=True)
 

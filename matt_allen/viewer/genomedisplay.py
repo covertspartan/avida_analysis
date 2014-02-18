@@ -33,8 +33,7 @@ class GenomeDisplay(Tk.Text):
         self.delete('1.0', 'end')
         self.insert('1.0', new_text.upper())
         self.text = new_text
-        if len(parent_text):
-            self._diff_text(self.text, parent_text)
+        self._diff_text(self.text, parent_text)
         self.config(state='disabled')
 
     def _diff_text(self, new_text, parent_text):
@@ -44,7 +43,7 @@ class GenomeDisplay(Tk.Text):
         @param new_text: the text of the new genome.
         @param parent_text: the text of the parent genome.
         """
-        if new_text is None or parent_text is None:
+        if new_text is None or parent_text is None or len(parent_text) == 0:
             return
             
         self.tag_delete('diff')

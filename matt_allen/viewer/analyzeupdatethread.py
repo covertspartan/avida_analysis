@@ -29,7 +29,7 @@ class AnalyzeUpdateThread(AnalyzeThread):
             start = default_timer()
             with self.lock:
                 output = self.evaluator.get_batch_data(sequences, ['task_list', 'fitness',
-                                                                   'gestation', 'merit'])
+                                                                   'gest_time', 'merit'])
             time = default_timer() - start
 
             for i, out in enumerate(output):

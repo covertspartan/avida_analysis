@@ -237,7 +237,7 @@ class LineageViewer(Tk.Frame):
                                                   {'Sparent':3,'Iliving':4, 
                                                    'Ffitness':9, 'Sgenome':16,
                                                    'Itotal':5, 'Fmerit':7,
-                                                   'Fgestation':8, 'Idepth':13})
+                                                   'Fgest_time':8, 'Idepth':13})
         self.population_data.trace_line_of_descent()
 
         lineage_data = []
@@ -330,6 +330,7 @@ class LineageViewer(Tk.Frame):
                     for key, value in data.iteritems():
                         if key != 'task_list':
                             self.lineage_data[index][key] = parsers.convert(value)
+                            self.lineage.genotypes[index].update()
                         else:
                             self._update_tasks(index, value)
                 elif message[0] == 'update_all':
@@ -388,7 +389,7 @@ class LineageViewer(Tk.Frame):
             self.living_var.set(data['living'])
             self.total_var.set(data['total'])
             self.merit_var.set(data['merit'])
-            self.gestation_var.set(data['gestation'])
+            self.gestation_var.set(data['gest_time'])
             self.fitness_var.set(data['fitness'])
             self.depth_var.set(data['depth'])
             tasks = data.get('task_list')
