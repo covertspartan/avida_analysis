@@ -59,7 +59,9 @@ class LineageViewer(Tk.Frame):
                    ('Genome', 400, True),
                    ('Tasks', 175, True),
                    ('Organism ID', 100, False),
-                   ('Fitness', 100, True)]
+                   ('Fitness', 100, True),
+                   ('Gestation Time', 100, True),
+                   ('Depth', 100, True)]
         self.column_settings = [{'label':label, 'width':width, 'var':Tk.BooleanVar()}
                                 for label, width, show in columns]
         for settings, (l, w, show) in zip(self.column_settings, columns):

@@ -44,6 +44,8 @@ class Genotype(Tk.Frame):
         self.id_var = Tk.StringVar()
         self.fit_var = Tk.StringVar()
         self.task_var = Tk.StringVar()
+        self.gestation_var = Tk.StringVar()
+        self.depth_var = Tk.StringVar()
         self.initialize()
 
         
@@ -73,6 +75,8 @@ class Genotype(Tk.Frame):
         self.id_var.set(self.data['id'])
         self.fit_var.set('%0.2f' % self.data['fitness'])
         self.task_var.set('...')
+        self.gestation_var.set('%0.2f' % self.data['gest_time'])
+        self.depth_var.set(str(self.data['depth']))
 
         task_frame = Tk.Frame(self, height=75, width=self.column_settings[3]['width'])
         task_frame.grid(row=0, column=3)
@@ -80,18 +84,14 @@ class Genotype(Tk.Frame):
         task_label = Tk.Message(task_frame, textvariable=self.task_var, anchor='w', width=self.column_settings[3]['width'])
         task_label.pack(fill=Tk.BOTH, expand=True)
 
-        id_frame = Tk.Frame(self, height=15, width=self.column_settings[4]['width'])
-        id_frame.grid(row=0, column=4)
-        id_frame.pack_propagate(False)
-        id_label = Tk.Label(id_frame, textvariable=self.id_var, anchor='e')
-        id_label.pack(fill=Tk.BOTH, expand=True)
+        id_frame = self._column_label(4, self.id_var, height=15)
 
-        fit_frame = Tk.Frame(self, height=15, width=self.column_settings[5]['width'])
-        fit_frame.grid(row=0, column=5)
-        fit_frame.pack_propagate(False)
-        fit_label = Tk.Label(fit_frame, textvariable=self.fit_var,  anchor='e')
-        fit_label.pack(fill=Tk.BOTH, expand=True)
+        fit_frame = self._column_label(5, self.fit_var, height=15)
         
+        gest_frame = self._column_label(6, self.gestation_var, height=15)
+
+        depth_frame = self._column_label(7, self.depth_var, height=15)
+
         self.update_color(self.selected_fitness)
         parent_fitness = self.parent_data.get('fitness')
         self.update_color(parent_fitness, parent=True)
@@ -102,6 +102,13 @@ class Genotype(Tk.Frame):
                         id_frame, fit_frame]
         self._retag(str(self.data['id']), *self.columns)
 
+    def _column_label(self, col, var, **kwargs):
+        frame = Tk.Frame(self, width=self.column_settings[col]['width'], **kwargs)
+        frame.grid(row=0, column=col)
+        frame.pack_propagate(False)
+        label = Tk.Label(frame, textvariable=var,  anchor='e')
+        label.pack(fill=Tk.BOTH, expand=True)
+        return frame
 
 
     def _retag(self, tag, *args):
@@ -131,7 +138,9 @@ class Genotype(Tk.Frame):
             self.data[key] = value
 
         self.id_var.set(self.data['id'])
-        self.fit_var.set(self.data['fitness'])
+        self.fit_var.set('%0.2f' % self.data['fitness'])
+        self.gestation_var.set('%0.2f' % self.data['gest_time'])
+        self.depth_var.set(str(self.data['depth']))
 
         self.rel_fitness = 0
         if self.data['fitness'] > 0:

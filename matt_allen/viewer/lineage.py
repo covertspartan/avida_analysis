@@ -66,7 +66,8 @@ class Lineage(Element):
                          entry, parent_data, self.max_fitness,
                          selected_fitness=self.data[0]['fitness'], bd=2)
             parent_data = entry
-            g.grid(row=index, sticky='ew')
+            #g.grid(row=index, sticky='EW')
+            g.pack(fill=Tk.X, expand=True)
 
             
 
