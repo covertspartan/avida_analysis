@@ -111,13 +111,11 @@ class LineageViewer(Tk.Frame):
         lineage_frame = Tk.LabelFrame(col_frame, text='Lineage')
         col_frame.add(lineage_frame, padx=5, pady=5)
         col_frame.paneconfig(lineage_frame, sticky=Tk.E+Tk.W+Tk.N+Tk.S, stretch='always')
-        
         self.lineage = Lineage(lineage_frame, self, self.settings, self.column_settings,
                                self.lineage_data,
                                self.max_fitness,
-                               self._on_lineage_click)
+                               self._on_lineage_click, max = self.settings['displaymax'])
         self.lineage.pack(fill=Tk.BOTH, expand=True)
-
         right_frame = Tk.Frame(col_frame)
         col_frame.add(right_frame, padx=5, pady=5)
 
@@ -126,7 +124,7 @@ class LineageViewer(Tk.Frame):
         genome_label = Tk.Label(info_frame, text=('Genome (Green = insertion, Blue = mutation, '
                                                   'Red = deletion'))
         genome_label.pack()
-        self.genome_display = GenomeDisplay(info_frame, '', height=6)
+        self.genome_display = GenomeDisplay(info_frame, '', height=10)
         self.genome_display.pack(fill=Tk.X)
 
         data_frame = Tk.Frame(info_frame)
@@ -235,15 +233,15 @@ class LineageViewer(Tk.Frame):
         @param filename: The relative file path of the detail dump.
         @return: the list of genome data.
         """
-        self.population_data = cASexualPopulation(filename,
+        population_data = cASexualPopulation(filename,
                                                   {'Sparent':3,'Iliving':4, 
                                                    'Ffitness':9, 'Sgenome':16,
                                                    'Itotal':5, 'Fmerit':7,
                                                    'Fgest_time':8, 'Idepth':13})
-        self.population_data.trace_line_of_descent()
+        population_data.trace_line_of_descent()
 
         lineage_data = []
-        for id, org in self.population_data.walk_line_of_descent():
+        for id, org in population_data.walk_line_of_descent():
             del org['raw']
             org['id'] = id
             lineage_data.insert(0, org)
@@ -449,7 +447,11 @@ def main(argv):
     Loades settings file and handles command line args, then starts Tk.
     """
     error = 'usage: python lineageviewer.py'
-    settings = {'settingsfile':'settings.cfg', 'detaildump':None, 'jsonfile':None}
+    settings = {'settingsfile':'settings.cfg', 'detaildump':None, 'jsonfile':None, 'displaymax':250}
+
+    #parse the settings file to get other unspecified options
+    parsers.parse_data(None, settings, settings['settingsfile'], parsers.parse_config_line) 
+
     try:
         opts, args = getopt.getopt(argv, 'hd:j:', ['detail=', 'jsonfile='])
     except getopt.GetoptError:
@@ -460,12 +462,11 @@ def main(argv):
             print error
             sys.exit()
         elif opt in ('-d', '--detail'):
-            settings['detailfile'] = arg
+            settings['detaildump'] = arg
         elif opt in ('-j', '--jsonfile'):
             settings['jsonfile'] = arg
 
-    #parse the settings file to get other unspecified options
-    parsers.parse_data(None, settings, settings['settingsfile'], parsers.parse_config_line)
+
         
     if settings['detaildump'] is None and settings['jsonfile'] is None:
         print >> sys.stderr, ('A detail dump must be specified in settings.cfg as DETAIL_DUMP, '
@@ -487,7 +488,6 @@ def main(argv):
                                       data=app.lineage_data, daemon=True)
     analyze_thread.start()
     app.after(100, app.update_analyze)
-
     app.mainloop()
 
 if __name__ == '__main__':

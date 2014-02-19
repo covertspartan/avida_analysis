@@ -11,7 +11,7 @@ class Lineage(Element):
     """
     The list view of all genomes in the lineage.
     """
-    def __init__(self, parent, app, settings, column_settings, data, max_fitness, callback,
+    def __init__(self, parent, app, settings, column_settings, data, max_fitness, callback, max=250,
                  *args, **kwargs):
         """
         Create an instance of the lineage list.
@@ -36,6 +36,7 @@ class Lineage(Element):
         self.select_end = None
         self.dependencies = []
         self.resolve_dependencies()
+        self.max = max
         self.initialize()
 
     def initialize(self):
@@ -62,6 +63,8 @@ class Lineage(Element):
         parent_data = {}
         
         for index, entry in enumerate(self.data):
+            if index > self.max:
+                break
             g = Genotype(self.lineage_frame.interior, self.settings, self.column_settings,
                          entry, parent_data, self.max_fitness,
                          selected_fitness=self.data[0]['fitness'], bd=2)
@@ -173,9 +176,11 @@ class Lineage(Element):
         @param index: the index of the element to update.
         @param tasks: the updated task list.
         """
+        if index > self.max:
+            return
         self.data[index]['task_list'] = tasks
         self.genotypes[index].update(data=self.data[index])
-        if index + 1 < len(self.data):
+        if index + 1 < len(self.genotypes):
             self.data[index + 1]['parent_task_list'] = tasks
             self.genotypes[index + 1].update(data=self.data[index + 1])
         self.genotypes[index].update_tasks()

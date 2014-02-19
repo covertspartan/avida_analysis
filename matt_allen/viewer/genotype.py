@@ -68,7 +68,7 @@ class Genotype(Tk.Frame):
 
         color = self.cget('bg')
 
-        genome_frame = Tk.Frame(self, height=75, width=self.column_settings[2]['width'])
+        genome_frame = Tk.Frame(self, height=100, width=self.column_settings[2]['width'])
         genome_frame.grid(row=0, column=2)
         genome_frame.pack_propagate(False)
         self.genome_display = GenomeDisplay(genome_frame, self.data['genome'], bg=color,
