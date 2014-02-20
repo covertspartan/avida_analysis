@@ -98,6 +98,7 @@ class LineageViewer(Tk.Frame):
         file_menu.add_command(label='Copy selected genomes', command=self._copy_selection,
                               accelerator='Ctrl+W')
         tkutils.bind_children(self.parent, '<Control-w>', self._copy_selection)
+        tkutils.bind_children(self.parent, '<Alt-w>', self._copy_selection)
 
         file_menu.add_command(label='Close', command=self.parent.destroy, accelerator='Ctrl+Q')
         tkutils.bind_children(self.parent, '<Control-q>', lambda e: self.parent.destroy())
