@@ -94,6 +94,11 @@ class LineageViewer(Tk.Frame):
         tkutils.bind_children(self.parent, '<Control-f>', lambda e: self.load_json_window())
         window_callback = lambda:self.create_lineage_window(self.get_selected())
         file_menu.add_command(label='New window from selection', command=window_callback)
+
+        file_menu.add_command(label='Copy selected genomes', command=self._copy_selection,
+                              accelerator='Ctrl+W')
+        tkutils.bind_children(self.parent, '<Control-w>', self._copy_selection)
+
         file_menu.add_command(label='Close', command=self.parent.destroy, accelerator='Ctrl+Q')
         tkutils.bind_children(self.parent, '<Control-q>', lambda e: self.parent.destroy())
         
@@ -167,6 +172,18 @@ class LineageViewer(Tk.Frame):
         edit_selected_button.pack(side=Tk.LEFT)
 
 
+    def _copy_selection(self, *args, **kwargs):
+        """
+        Copy the genomes of the current selection to the clipboard, separated by newlines.
+        """
+        selection = self.get_selected()
+        genomes = ''
+        for d in selection:
+            genomes += d['genome'] + '\n'
+
+        self.clipboard_clear()
+        self.clipboard_append(genomes.strip())
+
     def edit_genome_dialog(self, data):
         """
         Spawn a dialog to edit a genome and update the
@@ -181,12 +198,11 @@ class LineageViewer(Tk.Frame):
         end_genome = dialog.result
         if end_genome is not None:
             changes = tkutils.diff_genomes(start_genome, end_genome)
-            
             if changes:
                 for d in data:
                     new_genome = d['genome']
                     for type, start, size, new_text in changes:
-                        new_genome = new_genome[0:start] + new_text + new_genome[start+size:-1]
+                        new_genome = new_genome[0:start] + new_text + new_genome[start+size:]
                     d['genome'] = new_genome
                 thread = AnalyzeUpdateThread(lock=self.analyze_lock,
                                              path=self.settings['pathtoavida'], app=self,
