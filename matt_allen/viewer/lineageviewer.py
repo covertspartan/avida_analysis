@@ -41,6 +41,7 @@ class LineageViewer(Tk.Frame):
                                if not supplied.
         """
         Tk.Frame.__init__(self, parent, *args, **kwargs)
+        
         self.settings = settings
         self.parent = parent
         if self.settings.get('abscolor') is None:
@@ -99,6 +100,9 @@ class LineageViewer(Tk.Frame):
                               accelerator='Ctrl+W')
         tkutils.bind_children(self.parent, '<Control-w>', self._copy_selection)
         tkutils.bind_children(self.parent, '<Alt-w>', self._copy_selection)
+        tkutils.bind_children(self.parent, '<Meta-w>', self._copy_selection)
+
+
 
         file_menu.add_command(label='Close', command=self.parent.destroy, accelerator='Ctrl+Q')
         tkutils.bind_children(self.parent, '<Control-q>', lambda e: self.parent.destroy())
@@ -185,6 +189,8 @@ class LineageViewer(Tk.Frame):
         self.clipboard_clear()
         self.clipboard_append(genomes.strip())
 
+        return 'break'
+
     def edit_genome_dialog(self, data):
         """
         Spawn a dialog to edit a genome and update the
@@ -203,7 +209,14 @@ class LineageViewer(Tk.Frame):
                 for d in data:
                     new_genome = d['genome']
                     for type, start, size, new_text in changes:
-                        new_genome = new_genome[0:start] + new_text + new_genome[start+size:]
+                        if type == 'diff':
+                            new_genome = new_genome[0:start] + new_text + new_genome[start+size:]
+                        elif type == 'ins':
+                            new_genome = new_genome[0:start] + new_text + new_genome[start:]
+                        elif type == 'del':
+                            new_genome = new_genome[0:start] + new_genome[start+size:]
+                        else:
+                            print 'Error, unexpected mutation type'
                     d['genome'] = new_genome
                 thread = AnalyzeUpdateThread(lock=self.analyze_lock,
                                              path=self.settings['pathtoavida'], app=self,
