@@ -206,7 +206,7 @@ class LineageViewer(Tk.Frame):
         end_genome = dialog.result
         print end_genome
         if end_genome is not None:
-            changes = tkutils.diff_genomes(start_genome, end_genome, debug=True)
+            changes = tkutils.diff_genomes(start_genome, end_genome)
             print changes
             if changes:
                 new_changes = changes[:]
