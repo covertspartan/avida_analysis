@@ -75,6 +75,7 @@ class Lineage(Element):
 
 
                 tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=index))
+                tkutils.bind_children(g, '<Shift-Button-1>', partial(self._on_shift_pressed, index=index))
                 tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=index))
                 self.genotypes.append(g)
 
@@ -84,6 +85,14 @@ class Lineage(Element):
 
         self.on_column_changed()
         
+
+    def _on_shift_pressed(self, event, index=None):
+        if index is not None:
+            self.select_end = index
+
+        self._update_selection()
+                              
+
     def _on_pressed(self, event, index=None):
         """
         Callback for mouse click events on items of the list.
