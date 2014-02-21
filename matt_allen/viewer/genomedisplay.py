@@ -31,7 +31,7 @@ class GenomeDisplay(Tk.Text):
         """
         self.config(state='normal')
         self.delete('1.0', 'end')
-        self.insert('1.0', new_text.upper())
+        self.insert('1.0', new_text)
         self.text = new_text
         self._diff_text(self.text, parent_text)
         self.config(state='disabled')

@@ -124,7 +124,8 @@ class LineageViewer(Tk.Frame):
         self.lineage = Lineage(lineage_frame, self, self.settings, self.column_settings,
                                self.lineage_data,
                                self.max_fitness,
-                               self._on_lineage_click, max = self.settings['displaymax'])
+                               self._on_lineage_click, max = self.settings['displaymax'],
+                               min = self.settings['displaymin'])
         self.lineage.pack(fill=Tk.BOTH, expand=True)
         right_frame = Tk.Frame(col_frame)
         col_frame.add(right_frame, padx=5, pady=5)
@@ -491,7 +492,8 @@ def main(argv):
     Loades settings file and handles command line args, then starts Tk.
     """
     error = 'usage: python lineageviewer.py'
-    settings = {'settingsfile':'settings.cfg', 'detaildump':None, 'jsonfile':None, 'displaymax':250}
+    settings = {'settingsfile':'settings.cfg', 'detaildump':None, 'jsonfile':None, 'displaymax':250,
+                'displaymin':0}
 
     #parse the settings file to get other unspecified options
     parsers.parse_data(None, settings, settings['settingsfile'], parsers.parse_config_line) 

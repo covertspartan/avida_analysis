@@ -12,7 +12,7 @@ class Lineage(Element):
     The list view of all genomes in the lineage.
     """
     def __init__(self, parent, app, settings, column_settings, data, max_fitness, callback, max=250,
-                 *args, **kwargs):
+                 min=0, *args, **kwargs):
         """
         Create an instance of the lineage list.
 
@@ -36,6 +36,7 @@ class Lineage(Element):
         self.select_end = None
         self.dependencies = []
         self.resolve_dependencies()
+        self.min = 0
         self.max = max
         self.initialize()
 
@@ -63,20 +64,19 @@ class Lineage(Element):
         parent_data = {}
         
         for index, entry in enumerate(self.data):
-            if index > self.max:
-                break
-            g = Genotype(self.lineage_frame.interior, self.settings, self.column_settings,
-                         entry, parent_data, self.max_fitness,
-                         selected_fitness=self.data[0]['fitness'], bd=2)
-            parent_data = entry
-            #g.grid(row=index, sticky='EW')
-            g.pack(fill=Tk.X, expand=True)
+            if self.min <= index < self.max:
+                g = Genotype(self.lineage_frame.interior, self.settings, self.column_settings,
+                             entry, parent_data, self.max_fitness,
+                             selected_fitness=self.data[0]['fitness'], bd=2)
+                parent_data = entry
+                #g.grid(row=index, sticky='EW')
+                g.pack(fill=Tk.X, expand=True)
 
-            
 
-            tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=index))
-            tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=index))
-            self.genotypes.append(g)
+
+                tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=index))
+                tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=index))
+                self.genotypes.append(g)
 
         tkutils.bind_children(self.parent, '<Button-4>', self.lineage_frame._on_mouse_wheel)
         tkutils.bind_children(self.parent, '<Button-5>', self.lineage_frame._on_mouse_wheel)
@@ -176,14 +176,13 @@ class Lineage(Element):
         @param index: the index of the element to update.
         @param tasks: the updated task list.
         """
-        if index > self.max:
-            return
-        self.data[index]['task_list'] = tasks
-        self.genotypes[index].update(data=self.data[index])
-        if index + 1 < len(self.genotypes):
-            self.data[index + 1]['parent_task_list'] = tasks
-            self.genotypes[index + 1].update(data=self.data[index + 1])
-        self.genotypes[index].update_tasks()
+        if self.min <= index < self.max:
+            self.data[index]['task_list'] = tasks
+            self.genotypes[index].update(data=self.data[index])
+            if index + 1 < len(self.genotypes):
+                self.data[index + 1]['parent_task_list'] = tasks
+                self.genotypes[index + 1].update(data=self.data[index + 1])
+            self.genotypes[index].update_tasks()
 
     def update_all(self):
         """
@@ -192,3 +191,4 @@ class Lineage(Element):
         for g in self.genotypes:
             g.update()
             g.update_tasks()
+
