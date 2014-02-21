@@ -206,9 +206,22 @@ class LineageViewer(Tk.Frame):
         if end_genome is not None:
             changes = tkutils.diff_genomes(start_genome, end_genome)
             if changes:
+                new_changes = changes[:]
+                parent = None
                 for d in data:
+                    current_changes = tkutils.diff_genomes(parent, d['genome'])
+                    parent = d['genome']
+
+                    if current_changes:
+                        for type, start, size, new_text in current_changes:
+                            if type == 'ins':
+                                new_changes = tkutils.transform_ops(new_changes, start, size)
+                            elif type == 'del':
+                                new_changes = tkutils.transform_ops(new_changes, start, -size)
+
+
                     new_genome = d['genome']
-                    for type, start, size, new_text in changes:
+                    for type, start, size, new_text in new_changes:
                         if type == 'diff':
                             new_genome = new_genome[0:start] + new_text + new_genome[start+size:]
                         elif type == 'ins':
@@ -225,6 +238,7 @@ class LineageViewer(Tk.Frame):
 
             self.lineage.update_all()
                     
+
         
     def load_data(self, data=None):
         """

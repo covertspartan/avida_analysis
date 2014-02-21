@@ -25,7 +25,8 @@ def diff_genomes(start_genome, end_genome):
               form ("type", start_index, size, new_text)
               corresponding to a region of text in the genome.
     """
-
+    if start_genome is None or end_genome is None:
+        return []
     s = difflib.SequenceMatcher(a=start_genome, b=end_genome)
     changes = []
 
@@ -48,3 +49,11 @@ def diff_genomes(start_genome, end_genome):
         oldmatch = block
 
     return changes
+
+def transform_ops(operations, index, delta):
+    for i in range(len(operations)):
+        etype, estart, esize, etext = operations[i]
+
+        if estart >= index:
+            operations[i] = (etype, estart + delta, esize, etext)
+    return operations
