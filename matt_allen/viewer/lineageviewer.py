@@ -204,8 +204,10 @@ class LineageViewer(Tk.Frame):
         start_genome = data[0]['genome']
         dialog = EditDialog(self, start_genome)
         end_genome = dialog.result
+        print end_genome
         if end_genome is not None:
-            changes = tkutils.diff_genomes(start_genome, end_genome)
+            changes = tkutils.diff_genomes(start_genome, end_genome, debug=True)
+            print changes
             if changes:
                 new_changes = changes[:]
                 parent = None
@@ -412,6 +414,8 @@ class LineageViewer(Tk.Frame):
         label.pack(padx=(0,15), fill=Tk.X)
         value = Tk.Label(value_frame, textvariable=var, anchor=Tk.W)
         value.pack(fill=Tk.X)
+
+
 
     def _on_lineage_click(self, event, index=None):
         """

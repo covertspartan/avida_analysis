@@ -13,7 +13,7 @@ def bind_children(widget, *args, **kwargs):
     for child in widget.winfo_children():
         bind_children(child, *args, **kwargs)
 
-def diff_genomes(start_genome, end_genome):
+def diff_genomes(start_genome, end_genome, debug=False):
     """
     Compare two genomes to find how they differ, return
     the result as a list of tuples containing details of the
@@ -28,11 +28,14 @@ def diff_genomes(start_genome, end_genome):
     if start_genome is None or end_genome is None:
         return []
     s = difflib.SequenceMatcher(a=start_genome, b=end_genome)
+
     changes = []
 
     oldmatch = None
     offset = 0
     for block in s.get_matching_blocks():
+        if debug:
+            print block
         if block.a + offset < block.b:
             offset += block.b - block.a
             changes.append(('ins', block.a, block.b-block.a, end_genome[block.a:block.b]))
@@ -40,9 +43,13 @@ def diff_genomes(start_genome, end_genome):
         elif block.a + offset > block.b:
             offset += block.b - block.a
             changes.append(('del', block.b, block.a - block.b, ''))
-        elif oldmatch is not None:
-            start = oldmatch.a + oldmatch.size
-            end = block.a
+        elif block.a != 0:
+            if oldmatch is not None:
+                start = oldmatch.a + oldmatch.size
+                end = block.a
+            else:
+                start = block.a - 1
+                end = block.a
             if start != end:
                 changes.append(('diff', start, end-start, end_genome[start:end]))
 
