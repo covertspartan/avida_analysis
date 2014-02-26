@@ -36,7 +36,7 @@ class Lineage(Element):
         self.select_end = None
         self.dependencies = []
         self.resolve_dependencies()
-        self.min = 0
+        self.min = min
         self.max = max
         self.initialize()
 
@@ -137,7 +137,7 @@ class Lineage(Element):
         start = min(self.select_start, self.select_end)
         end = max(self.select_start, self.select_end)
         for i, g in enumerate(self.genotypes):
-            g.set_selection(start <= i <= end)
+            g.set_selection(start - self.min<= i <= end - self.min)
 
     def on_column_changed(self, *args, **kwargs):
         """
@@ -187,11 +187,11 @@ class Lineage(Element):
         """
         if self.min <= index < self.max:
             self.data[index]['task_list'] = tasks
-            self.genotypes[index].update(data=self.data[index])
-            if index + 1 < len(self.genotypes):
+            self.genotypes[index - self.min].update(data=self.data[index])
+            if index + 1 < self.max and index + 1 < len(self.data):
                 self.data[index + 1]['parent_task_list'] = tasks
-                self.genotypes[index + 1].update(data=self.data[index + 1])
-            self.genotypes[index].update_tasks()
+                self.genotypes[index + 1 - self.min].update(data=self.data[index + 1])
+            self.genotypes[index - self.min].update_tasks()
 
     def update_all(self):
         """
