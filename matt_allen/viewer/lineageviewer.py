@@ -204,10 +204,8 @@ class LineageViewer(Tk.Frame):
         start_genome = data[0]['genome']
         dialog = EditDialog(self, start_genome)
         end_genome = dialog.result
-        print end_genome
         if end_genome is not None:
             changes = tkutils.diff_genomes(start_genome, end_genome)
-            print changes
             if changes:
                 new_changes = changes[:]
                 parent = None
@@ -377,7 +375,7 @@ class LineageViewer(Tk.Frame):
                     for key, value in data.iteritems():
                         if key != 'task_list':
                             self.lineage_data[index][key] = parsers.convert(value)
-                            self.lineage.genotypes[index].update()
+                            self.lineage.genotypes[index - self.lineage.min].update()
                         else:
                             self._update_tasks(index, value)
                 elif message[0] == 'update_all':
