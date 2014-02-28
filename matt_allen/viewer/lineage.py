@@ -205,10 +205,13 @@ class Lineage(Element):
         if index + 1 < len(self.data):
             self.data[index + 1]['parent_task_list'] = tasks
 
+        parent_data = {}
+        if index - 1 >= 0:
+            parent_data = self.data[index - 1]
         if start <= index < start + self.max_items:
-            self.genotypes[index - start + offset].update(index, self.data[index])
+            self.genotypes[index - start + offset].update(index, self.data[index], parent_data)
             if start <= index + 1 < start + self.max_items:
-                self.genotypes[index + 1 - start + offset].update(index + 1, self.data[index + 1])
+                self.genotypes[index + 1 - start + offset].update(index + 1, self.data[index + 1], self.data[index])
             self.genotypes[index - start + offset].update_tasks()
 
     def update_all(self):
@@ -216,7 +219,10 @@ class Lineage(Element):
         Call L{Genotype.update} on every member of the list.
         """
         for g in self.genotypes:
-            g.update(g.index, g.data)
+            parent_data = {}
+            if g.index - 1 >= 0:
+                parent_data = self.data[g.index - 1]
+            g.update(g.index, g.data, parent_data)
             g.update_tasks()
 
 

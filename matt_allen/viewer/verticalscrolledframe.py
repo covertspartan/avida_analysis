@@ -80,7 +80,10 @@ class VerticalScrolledFrame(Tk.Frame):
                     dy = -self.item_height * len(self.cache)
                 ci = ci % len(self.cache)
                 if index < self.total_items:
-                    self.cache[ci].update(index, self.data[index])
+                    parent_data = {}
+                    if index - 1 >= 0:
+                        parent_data = self.data[index -1]
+                    self.cache[ci].update(index, self.data[index], parent_data)
                 self.canvas.move(self.cache[ci].id, 0, dy)
 
             if self.cache_start < self.start:

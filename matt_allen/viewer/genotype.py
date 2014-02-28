@@ -133,7 +133,7 @@ class Genotype(Tk.Frame):
             else:
                 column.grid_forget()
         
-    def update(self, index, data):
+    def update(self, index, data, parent_data):
         """
         Update the data for this genome.
 
@@ -141,6 +141,7 @@ class Genotype(Tk.Frame):
         """
         self.index = index
         self.data = data
+        self.parent_data = parent_data
 
         self.id_var.set(self.data['id'])
         self.fit_var.set('%0.2f' % self.data['fitness'])
