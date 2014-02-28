@@ -14,7 +14,7 @@ class Genotype(Tk.Frame):
     """
     
     def __init__(self, parent, settings, column_settings, data, parent_data, max_fitness,
-                 selected_fitness=1,
+                 selected_fitness=1, index=0,
                  *args, **kwargs):
         """
         Create a new instance of the genotype display.
@@ -31,6 +31,7 @@ class Genotype(Tk.Frame):
         """
         Tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
+        self.index = index
         self.settings = settings
         self.column_settings = column_settings
         self.selected_fitness = selected_fitness
@@ -132,14 +133,14 @@ class Genotype(Tk.Frame):
             else:
                 column.grid_forget()
         
-    def update(self, **kwargs):
+    def update(self, index, data):
         """
         Update the data for this genome.
 
         @param kwargs: keyword arguments corresponding to the data dict.
         """
-        for key, value in kwargs.iteritems():
-            self.data[key] = value
+        self.index = index
+        self.data = data
 
         self.id_var.set(self.data['id'])
         self.fit_var.set('%0.2f' % self.data['fitness'])

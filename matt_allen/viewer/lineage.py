@@ -11,8 +11,8 @@ class Lineage(Element):
     """
     The list view of all genomes in the lineage.
     """
-    def __init__(self, parent, app, settings, column_settings, data, max_fitness, callback, max=250,
-                 min=0, *args, **kwargs):
+    def __init__(self, parent, app, settings, column_settings, data, max_fitness, callback, 
+                 max_items=25, item_height=150, *args, **kwargs):
         """
         Create an instance of the lineage list.
 
@@ -28,6 +28,7 @@ class Lineage(Element):
         self.app = app
         self.settings = settings
         self.column_settings = column_settings
+        self.item_height = item_height
         self.max_fitness = max_fitness
         self.callback = callback
         self.visible = True
@@ -36,8 +37,7 @@ class Lineage(Element):
         self.select_end = None
         self.dependencies = []
         self.resolve_dependencies()
-        self.min = min
-        self.max = max
+        self.max_items = max_items
         self.initialize()
 
     def initialize(self):
@@ -56,34 +56,43 @@ class Lineage(Element):
             label.pack(fill=Tk.BOTH, expand=True)
             self.labels.append(frame)
         
-        self.lineage_frame = VerticalScrolledFrame(self)
+        self.lineage_frame = VerticalScrolledFrame(self, self.data, total_items=len(self.data), 
+                                                   max_items=self.max_items, item_height=self.item_height)
         self.lineage_frame.pack(fill=Tk.BOTH, expand=True)
         self.lineage_frame.bind('<Button-1>', self._on_pressed)
         self.lineage_frame.bind('<B1-Motion>', self._on_drag)
         self.genotypes = []
-        parent_data = {}
         
-        for index, entry in enumerate(self.data):
-            if self.min <= index < self.max:
-                g = Genotype(self.lineage_frame.interior, self.settings, self.column_settings,
-                             entry, parent_data, self.max_fitness,
-                             selected_fitness=self.data[0]['fitness'], bd=2)
-                parent_data = entry
-                #g.grid(row=index, sticky='EW')
-                g.pack(fill=Tk.X, expand=True)
+        
+        for i in range(min(len(self.data), self.max_items)):
+            parent_data = {}
+            if i > 0:
+                parent_data = self.data[i-1]
+            g = Genotype(self.lineage_frame.canvas, self.settings, self.column_settings,
+                             self.data[i], parent_data, self.max_fitness,
+                             selected_fitness=self.data[0]['fitness'], bd=2, index=i, height=self.item_height)
+            g.id = self.lineage_frame.canvas.create_window(0, self.item_height * i, window=g, height=self.item_height,
+                                        anchor=Tk.NW, tag='row')
 
 
 
-                tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=index))
-                tkutils.bind_children(g, '<Shift-Button-1>', partial(self._on_shift_pressed, index=index))
-                tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=index))
-                self.genotypes.append(g)
 
-        tkutils.bind_children(self.parent, '<Button-4>', self.lineage_frame._on_mouse_wheel)
-        tkutils.bind_children(self.parent, '<Button-5>', self.lineage_frame._on_mouse_wheel)
-        tkutils.bind_children(self.parent, '<MouseWheel>', self.lineage_frame._on_mouse_wheel)
+            tkutils.bind_children(g, '<Button-1>', partial(self._on_pressed, index=i))
+            tkutils.bind_children(g, '<Shift-Button-1>', partial(self._on_shift_pressed, index=i))
+            tkutils.bind_children(g, '<B1-Motion>', partial(self._on_drag, index=i))
+            self.lineage_frame.cache.append(g)
+            self.genotypes.append(g)
+        
+
+        tkutils.bind_children(self.lineage_frame, '<Button-4>', self._on_mouse_wheel)
+        tkutils.bind_children(self.lineage_frame, '<Button-5>', self._on_mouse_wheel)
+        tkutils.bind_children(self.lineage_frame, '<MouseWheel>', self._on_mouse_wheel)
 
         self.on_column_changed()
+
+    def _on_mouse_wheel(self, *args, **kwargs):
+        self.lineage_frame._on_mouse_wheel(*args, **kwargs)
+        self._update_selection()
         
 
     def _on_shift_pressed(self, event, index=None):
@@ -136,8 +145,10 @@ class Lineage(Element):
         """
         start = min(self.select_start, self.select_end)
         end = max(self.select_start, self.select_end)
-        for i, g in enumerate(self.genotypes):
-            g.set_selection(start - self.min<= i <= end - self.min)
+        #for i, g in enumerate(self.genotypes):
+         #   g.set_selection(start - self.min<= i <= end - self.min)
+        for g in self.genotypes:
+            g.set_selection(start <= g.index <= end)
 
     def on_column_changed(self, *args, **kwargs):
         """
@@ -151,7 +162,9 @@ class Lineage(Element):
             else:
                 label.grid_forget()
         for g in self.genotypes:
-            g.on_column_changed(*args, **kwargs)                           
+            g.on_column_changed(*args, **kwargs)
+
+
 
     def _get_mouseover(self, event, index=None):
         """
@@ -177,6 +190,7 @@ class Lineage(Element):
         for gene in self.genotypes:
             gene.update_color(absolute=self.settings['abscolor'])
             gene.update_color(gene.parent_fitness, absolute=self.settings['abscolor'], parent=True)
+            
 
     def update_tasks(self, index, tasks):
         """
@@ -185,19 +199,24 @@ class Lineage(Element):
         @param index: the index of the element to update.
         @param tasks: the updated task list.
         """
-        if self.min <= index < self.max:
-            self.data[index]['task_list'] = tasks
-            self.genotypes[index - self.min].update(data=self.data[index])
-            if index + 1 < self.max and index + 1 < len(self.data):
-                self.data[index + 1]['parent_task_list'] = tasks
-                self.genotypes[index + 1 - self.min].update(data=self.data[index + 1])
-            self.genotypes[index - self.min].update_tasks()
+        start = self.lineage_frame.cache_start
+        offset = self.lineage_frame.cache_offset
+        self.data[index]['task_list'] = tasks
+        if index + 1 < len(self.data):
+            self.data[index + 1]['parent_task_list'] = tasks
+
+        if start <= index < start + self.max_items:
+            self.genotypes[index - start + offset].update(index, self.data[index])
+            if start <= index + 1 < start + self.max_items:
+                self.genotypes[index + 1 - start + offset].update(index + 1, self.data[index + 1])
+            self.genotypes[index - start + offset].update_tasks()
 
     def update_all(self):
         """
         Call L{Genotype.update} on every member of the list.
         """
         for g in self.genotypes:
-            g.update()
+            g.update(g.index, g.data)
             g.update_tasks()
+
 

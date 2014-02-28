@@ -124,8 +124,7 @@ class LineageViewer(Tk.Frame):
         self.lineage = Lineage(lineage_frame, self, self.settings, self.column_settings,
                                self.lineage_data,
                                self.max_fitness,
-                               self._on_lineage_click, max = self.settings['displaymax'],
-                               min = self.settings['displaymin'])
+                               self._on_lineage_click, max_items = self.settings['displaymax'])
         self.lineage.pack(fill=Tk.BOTH, expand=True)
         right_frame = Tk.Frame(col_frame)
         col_frame.add(right_frame, padx=5, pady=5)
