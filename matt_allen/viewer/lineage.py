@@ -112,6 +112,7 @@ class Lineage(Element):
         """
         if index is None:
             index = self._get_mouseover(event)
+        index = self.genotypes[index].index
         self.select_start = index
         self.select_end = index
         for gene in self.genotypes:
@@ -145,8 +146,6 @@ class Lineage(Element):
         """
         start = min(self.select_start, self.select_end)
         end = max(self.select_start, self.select_end)
-        #for i, g in enumerate(self.genotypes):
-         #   g.set_selection(start - self.min<= i <= end - self.min)
         for g in self.genotypes:
             g.set_selection(start <= g.index <= end)
 
@@ -177,6 +176,7 @@ class Lineage(Element):
         if self.genotype_height is None:
             self.genotype_height = self.genotypes[0].winfo_height()
         if index is not None:
+            index = self.genotypes[index].index
             delta = event.y // self.genotype_height
             return delta + index
         else:
