@@ -210,7 +210,7 @@ class Lineage(Element):
             parent_data = self.data[index - 1]
         if start <= index < start + self.max_items:
             self.genotypes[index - start + offset].update(index, self.data[index], parent_data)
-            if start <= index + 1 < start + self.max_items:
+            if start <= index + 1 < start + self.max_items and index + 1 < len(self.data) and 0 <= index + 1 - start + offset < len(self.genotypes):
                 self.genotypes[index + 1 - start + offset].update(index + 1, self.data[index + 1], self.data[index])
             self.genotypes[index - start + offset].update_tasks()
 
