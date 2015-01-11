@@ -26,11 +26,11 @@ class cASexualPopulation():
     # Input    - An optional detailDump containing a lineage from Avida analyze mode should be a lineage that is already
     #            traced not detailXXX.spop
     # Output   - a cASexualLineage object
-    def __init__ (self, detail_dump=None, fields={"Sparent":3,"Iliving":4}, hist_dump = None):
-        self._lin = {}        # dictionary which will contain the lineage
-        self._size = 0        # size of the dictionary
-        self._Dom = None      # ID of the dominant genotype
-        self._Ancestor = None # ID of the Ancestor
+    def __init__(self, detail_dump=None, fields={"Sparent": 3, "Iliving": 4}, hist_dump=None):
+        self._lin = {}         # dictionary which will contain the lineage
+        self._size = 0         # size of the dictionary
+        self._Dom = None       # ID of the dominant genotype
+        self._Ancestor = None  # ID of the Ancestor
         self._fields = fields
 
         # do we have a detail dump? If so, load that puppy up!
@@ -47,9 +47,11 @@ class cASexualPopulation():
     # Output   - a sting representing the lineage
     # Note     - This is sloooooooooooooooooooooooooooooow -- DEBUGGING ONLY PLEASE!
     def __str__(self):
-        lineage_str = "" # dummy string to hold the lineage
+        # dummy string to hold the lineage
+        lineage_str = ""
 
-        curr = self._lin[self._Dom] # have to start at the bottom for now
+        # have to start at the bottom for now
+        curr = self._lin[self._Dom]
         curr_id = self._Dom
 
         # next currently means the immediate parent, since we're walking backwards
@@ -140,7 +142,7 @@ class cASexualPopulation():
                 break
 
     # Function - cASexualLineage::_add_entry
-    # Purpose  - Add an entry the the appropirate types and labels to self._lin
+    # Purpose  - Add an entry the the appropriate types and labels to self._lin
     # Input    - 
     # Output   - 
     def _add_entry(self, raw, fields = None):
